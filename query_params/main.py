@@ -1,4 +1,5 @@
 from fastapi import FastAPI, params, Query
+from typing import Annotated
 
 app = FastAPI()
 
@@ -24,3 +25,13 @@ def query_param_with_query(query: str = Query(None, min_length=1, max_length=50)
 def query_params_validations(query: str = Query(None, min_length=1, max_length=43),
                              query2: str = Query("default", min_length=1, max_length=40)):
     return {"The firs query param is: ": query, "The second query param is: ": query2}
+
+
+@app.get("/query3")
+def query_params_annotated(query: Annotated[str | None, Query(max_length=50)] = None):
+    return {"The query param is: ": query}
+
+
+@app.get("/query4")
+def query_params_list(query: list[str] = Query(min_length=1, max_length=50)):
+    return {"The query param list is: ": query}
